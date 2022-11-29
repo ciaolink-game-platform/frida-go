@@ -1,4 +1,4 @@
-module ciaolink-game-platform/frida-go
+module github.com/ciaolink-game-platform/frida-go
 
 go 1.19
 
