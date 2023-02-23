@@ -5,8 +5,8 @@ import "C"
 import "fmt"
 
 const (
-	defaultDeviceTimeout  = 10
-	defaultProcessTimeout = 10
+	defaultDeviceTimeout  = 1 * 1000
+	defaultProcessTimeout = 1 * 1000
 )
 
 type DeviceType int

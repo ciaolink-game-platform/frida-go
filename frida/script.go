@@ -63,16 +63,20 @@ func (s *Script) Eternalize() error {
 }
 
 // Post sends post to the script.
-func (s *Script) Post(jsonString string, data []byte) {
+func (f *Script) Post(jsonString string, data []byte) {
 	jsonStringC := C.CString(jsonString)
 	defer C.free(unsafe.Pointer(jsonStringC))
 
-	gBytesData := goBytesToGBytes(data)
-	runtime.SetFinalizer(gBytesData, func(g *C.GBytes) {
-		clean(unsafe.Pointer(g), unrefGObject)
-	})
-	C.frida_script_post(s.sc, jsonStringC, gBytesData)
-	runtime.KeepAlive(gBytesData)
+	if data == nil {
+		C.frida_script_post(f.sc, jsonStringC, nil)
+	} else {
+		gBytesData := goBytesToGBytes(data)
+		runtime.SetFinalizer(gBytesData, func(g *C.GBytes) {
+			clean(unsafe.Pointer(g), unrefGObject)
+		})
+		C.frida_script_post(f.sc, jsonStringC, gBytesData)
+		runtime.KeepAlive(gBytesData)
+	}
 }
 
 // EnableDebugger function enables debugging on the port specified
